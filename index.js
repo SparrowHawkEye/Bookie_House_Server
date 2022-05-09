@@ -13,7 +13,7 @@ app.use(express.json());
 //**JWT TOKEN */
 const verifyJWT = (req, res, next) => {
   const authHeader = req.headers.authorization;
-  if (!authorization) {
+  if (!authHeader) {
     return res.status(401).send({ message: "unauthorized access" });
   }
   const token = authHeader.split(" ")[1];
@@ -48,7 +48,7 @@ async function run() {
     app.post("/login", (req, res) => {
       const user = req.body;
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN, {
-        expireIn: "7d",
+        expiresIn: "7d",
       });
       res.send({ accessToken });
     });
