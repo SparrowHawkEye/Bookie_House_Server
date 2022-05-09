@@ -32,6 +32,13 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+
+    app.get("/book/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const book = await bookCollection.findOne(query);
+      res.send(book);
+    });
     //** POST API (http://localhost:5000/book) FROM DATABASE*/
 
     app.post("/book", async (req, res) => {
@@ -53,11 +60,27 @@ async function run() {
       res.send(result);
     });
     //** DELETE API (http://localhost:5000/book/${id}) FROM DATABASE*/
-    app.delete("/note/:id", async (req, res) => {
+    app.delete("/book/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: ObjectId(id) };
       const result = await bookCollection.deleteOne(filter);
       res.send(result);
+    });
+
+    //** MY ITEMS API */
+    app.get("/myItems", async (req, res) => {
+      const email = req.query.email;
+
+      const query = { email };
+      const cursor = bookCollection.find(query);
+      const myItems = await cursor.toArray();
+      res.send(myItems);
+
+      app.post("/myItem", async (req, res) => {
+        const item = req.body;
+        const result = await bookCollection.insertOne(item);
+        res.send(result);
+      });
     });
   } finally {
     // await client.close();
