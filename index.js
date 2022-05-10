@@ -21,7 +21,7 @@ const verifyJWT = (req, res, next) => {
     if (err) {
       return res.status(403).send({ message: Forbidden });
     }
-    console.log("decoded", decoded);
+    // console.log("decoded", decoded);
     req.decoded = decoded;
     next();
   });
@@ -72,6 +72,7 @@ async function run() {
 
     app.post("/book", async (req, res) => {
       const book = req.body;
+      // console.log(req.body);
       const result = await bookCollection.insertOne(book);
       res.send(result);
     });
@@ -98,11 +99,11 @@ async function run() {
 
     //** MY ITEMS API */
     app.get("/myItems", verifyJWT, async (req, res) => {
-      const decodedEmail = req.decoded.email;
+      const decodedEmail = req.decoded?.email;
       const email = req.query.email;
       if (email === decodedEmail) {
         const query = { email };
-        const cursor = addedCollection.find(query);
+        const cursor = bookCollection.find(query);
         const myItems = await cursor.toArray();
         res.send(myItems);
       } else{
