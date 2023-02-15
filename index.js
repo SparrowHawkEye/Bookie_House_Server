@@ -7,7 +7,9 @@ require("dotenv").config();
 const app = express();
 
 //**USE MIDDLEWARE */
-app.use(cors());
+app.use(cors({
+  origin: "https://bookie-house-server.vercel.app/",
+}));
 app.use(express.json());
 
 //**JWT TOKEN */
